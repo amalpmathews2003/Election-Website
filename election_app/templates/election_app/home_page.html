@@ -1,1 +1,8 @@
-<h1>Welcome Home</h1>
+{% extends 'election_app/base.html' %}
+
+{% block content %}
+	<h1>Welcome Home</h1>
+
+
+{% include 'election_app/notice_box.html'%}
+{% endblock %}
