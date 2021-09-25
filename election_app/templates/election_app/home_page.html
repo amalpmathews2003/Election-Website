@@ -3,6 +3,9 @@
 {% block content %}
 	<h1>Welcome Home</h1>
 
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+{% endif %}
 
 {% include 'election_app/notice_box.html'%}
 {% endblock %}
