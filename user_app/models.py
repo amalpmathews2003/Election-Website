@@ -3,6 +3,11 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
+# from .model1 import VoterModel
+# from .model2 import CandidateModel
+# from .model3 import InvigilaterModel
+
 class VoterModel(models.Model):
 	user=models.OneToOneField(User,on_delete=models.CASCADE)
 	roll_no=models.CharField(max_length=20,null=True)
@@ -32,6 +37,7 @@ class CandidateModel(models.Model):
 	description=models.TextField(blank=True,null=True)
 	position=models.CharField(max_length=200,choices=position_choices,default='1')
 	image=models.ImageField(upload_to="images/",blank=True,null=True)
+	symbol=models.ImageField(upload_to="images/",blank=True,null=True)
 	votes=models.IntegerField(default=0)
 	is_validated=models.BooleanField(default=0)
 	def __str__(self):

@@ -80,6 +80,14 @@ button:hover {
 .step.finish {
   background-color: #04AA6D;
 }
+table {
+  border-collapse: separate;
+  border-spacing: 150px 0;
+}
+
+td {
+  padding: 10px 0;
+}
 </style>
 <body>
 
@@ -87,60 +95,65 @@ button:hover {
 
 
 
-{{member_candidate}}<br>
+<!-- {{member_candidate}}<br>
 {{secretary_candidate}}<br>
 {{chairman_candidate}}<br>
-
+ -->
 <form id="regForm" action="" method="POST">
   {% csrf_token %}
   {{form.as_p}}
   <h1>SAC Election</h1>
-  <div class="tab">Member Candidates
+  <div class="tab"><h2>Member Candidates</h2>
     <table>
       <tr>
         <th>Name</th>
         <th>Symbol</th>
         <th>Vote</th>
       </tr>
-      <tr>
+     
         {% for candidate in member_candidate %}
+         <tr>
           <td>{{candidate.user.first_name}}</td>
-          <td>{{candidate.image}}</td>
+          <td><img src="{{candidate.image.url}}" width="50" height="50"></td>
           <td><input type="radio" name="member_candidate"  value="{{candidate.roll_no}},"></td>
+           </tr>
         {% endfor %}
-      </tr>
+     
     </table>
   </div>
-  <div class="tab">Screteray Candidates
+  <div class="tab"><h2>Screteray Candidates</h2>
   <table>
       <tr>
         <th>Name</th>
         <th>Symbol</th>
         <th>Vote</th>
       </tr>
-      <tr>
         {% for candidate in secretary_candidate %}
+        <tr>
           <td>{{candidate.user.first_name}}</td>
-          <td>{{candidate.image}}</td>
+          <td><img src="{{candidate.image.url}}" width="50" height="50"></td>
           <td><input type="radio" name="secretary_candidate"  value="{{candidate.roll_no}},"></td>
+          </tr>
         {% endfor %}
-      </tr>
+      
     </table>
   </div>
-  <div class="tab">Chairman Candidates
+  <div class="tab"><h2>Chairman Candidates</h2>
      <table>
       <tr>
         <th>Name</th>
         <th>Symbol</th>
         <th>Vote</th>
       </tr>
-      <tr>
+     
         {% for candidate in chairman_candidate %}
+         <tr>
           <td>{{candidate.user.first_name}}</td>
-          <td>{{candidate.image}}</td>
+          <td><img src="{{candidate.image.url}}" width="50" height="50"></td>
           <td><input type="radio" name="chairman_candidate"  value="{{candidate.roll_no}},"></td>
+          </tr>
         {% endfor %}
-      </tr>
+      
     </table>
   </div>
   <div class="tab">

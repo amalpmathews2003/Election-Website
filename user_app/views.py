@@ -32,7 +32,7 @@ def declare_results(request):
 def start_voting(request):
 	if not request.user.is_authenticated:
 		return redirect('login-voter')
-	if request.user.is_voted:
+	if request.user.votermodel.is_voted:
 		return redirect('home-page')
 	if request.method=="POST":
 		form=VotingForm(request.POST)
@@ -45,8 +45,15 @@ def start_voting(request):
 				member=CandidateModel.objects.get(roll_no=data[1])
 				member.votes+=1
 				member.save()
+			voter=VoterModel.objects.get(user=request.user)
+			print(voter)
+			voter.is_voted=True
+			voter.save()
+			return redirect('home-page')
 			return redirect('home-page')
 	else:
+		if request.user.votermodel.is_voted:
+			return redirect('home-page')
 		form=VotingForm()
 		r=CandidateModel.objects.all()
 		member_candidate=CandidateModel.objects.filter(position="3",is_validated=1)
