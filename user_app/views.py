@@ -32,6 +32,8 @@ def declare_results(request):
 def start_voting(request):
 	if not request.user.is_authenticated:
 		return redirect('login-voter')
+	if request.user.is_voted:
+		return redirect('home-page')
 	if request.method=="POST":
 		form=VotingForm(request.POST)
 		if form.is_valid():
@@ -40,11 +42,9 @@ def start_voting(request):
 			datas=data.split(',')
 			for data in datas:
 				data=data.split(":")
-				#print(data[0],data[1])	 
 				member=CandidateModel.objects.get(roll_no=data[1])
 				member.votes+=1
 				member.save()
-
 			return redirect('home-page')
 	else:
 		form=VotingForm()
