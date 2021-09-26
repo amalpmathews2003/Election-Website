@@ -1,0 +1,15 @@
+{% include 'election_app/base.html' %}
+
+{% block content %}
+<h1>Login</h1>
+
+<form method="POST">
+	{% csrf_token %}
+	<input type="username" name="username" placeholder="Enter Username">
+	<br>
+	<input type="password" name="password" placeholder="Password">
+	<br>
+	<button type="submit" >Submit</button>
+</form>
+
+{% endblock %}
