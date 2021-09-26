@@ -10,9 +10,73 @@ def user_home_page(request):
 	return render(request,'user_app/temp.html',{})
 
 
+def declare_results(request):
+	all_candidates=CandidateModel.objects.all()
+	member_candidates=all_candidates.filter(position="3",is_validated=1)
+	secretary_candidates=all_candidates.filter(position="2",is_validated=1)
+	chairman_candidates=all_candidates.filter(position="1",is_validated=1)
+
+	member_candidates=member_candidates.order_by('-votes')[:3]
+	secretary_candidates=secretary_candidates.order_by('-votes')[:3]
+	chairman_candidates=chairman_candidates.order_by('-votes')[:3]
+	return render(request,'user_app/declare_page.html',
+		{"member_candidates":member_candidates,
+		"chairman_candidates":chairman_candidates,
+		"secretary_candidates":secretary_candidates
+		})
+
+# def redirect(request,url=None):
+# 	print(url)
+# 	return redirect('www.nitc.ac.in')
+
+def start_voting(request):
+	if not request.user.is_authenticated:
+		return redirect('login-voter')
+	if request.method=="POST":
+		form=VotingForm(request.POST)
+		if form.is_valid():
+			data=form.cleaned_data['eg']
+			data=data[:-1]
+			datas=data.split(',')
+			for data in datas:
+				data=data.split(":")
+				#print(data[0],data[1])	 
+				member=CandidateModel.objects.get(roll_no=data[1])
+				member.votes+=1
+				member.save()
+
+			return redirect('home-page')
+	else:
+		form=VotingForm()
+		r=CandidateModel.objects.all()
+		member_candidate=CandidateModel.objects.filter(position="3",is_validated=1)
+		secretary_candidate=CandidateModel.objects.filter(position="2",is_validated=1)
+		chairman_candidate=CandidateModel.objects.filter(position="1",is_validated=1)
+		return render(request,'election_app/temp.html',
+			{"member_candidate":member_candidate,
+			"secretary_candidate":secretary_candidate,
+			"chairman_candidate":chairman_candidate,
+			"form":form})	
+
+def confirm_poll(request):
+	return render()
+def login_user(request):
+	if request.method=="POST":
+		username=request.POST['username']
+		password=request.POST['password']
+		user=authenticate(username=username,password=password)
+		if user is not None:
+			login(request,user)
+			return redirect('home-page')
+		else:
+			return redirect('login-voter')
+	else:
+		return render(request,'user_app/temp.html',{})
+
+
 def logout_user(request):
 	logout(request)
-	return redirect('home page')
+	return redirect('home-page')
 
 
 def register_voter(request):
@@ -20,8 +84,10 @@ def register_voter(request):
 		form=RegisterVoterForm(request.POST,request.FILES)
 		if form.is_valid():
 			user=form.save()
+			#VoterModel.objects.create(user=user,roll_no=form.cleaned_data.get('roll_no'))
+			print(user)
+			#print(dir(user))
 			user.votermodel.roll_no=form.cleaned_data.get('roll_no')
-			user.votermodel.email=form.cleaned_data.get('email')
 			user.save()
 			password=form.cleaned_data.get('password1')
 			user=authenticate(username=user.username,password=password)
@@ -36,7 +102,6 @@ def register_candidate(request):
 		form=RegisterCandidateForm(request.POST,request.FILES)
 		if form.is_valid():
 			user=form.save()
-			user.candidatemodel.email=form.cleaned_data.get('email')
 			user.candidatemodel.roll_no=form.cleaned_data.get('roll_no')
 			user.candidatemodel.description=form.cleaned_data.get('description')
 			user.candidatemodel.position=form.cleaned_data.get('position')

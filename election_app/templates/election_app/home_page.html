@@ -6,6 +6,23 @@
 {% if user.is_authenticated %}
   Hi {{ user.username }}!
 {% endif %}
+<style>
+.center {
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+}
+</style>
+<div class="center">
+<h1 >Start to Poll<span class="badge bg-secondary">
+	<a href="{% url 'start-voting' %}" class="link-info">Click Here</span></a></h1>
+</div>
+{% include 'election_app/countdown.html' %}
+
 
 {% include 'election_app/notice_box.html'%}
 {% endblock %}
+
+<div>
+  {% include 'election_app/footer.html' %}  
+</div>

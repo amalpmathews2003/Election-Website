@@ -1,1 +1,10 @@
-<h1>User app</h1>
+<form action="" method="POST">
+	{% csrf_token %}
+	<form>
+    <input type="username" name="username"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username"> 
+
+    <br><br>
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    <br><br>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form> 
